@@ -39,6 +39,21 @@ public class Usuario {
 	@Size(max = 5000, message = "O link da foto não pode ser maior do que 5000 caracteres")
 	private String foto;
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", cascade = CascadeType.REMOVE)
+	@JsonIgnoreProperties("usuario")
+	private List<Produtos> produto;
+	
+	
+	
+	
+	public List<Produtos> getProduto() {
+		return produto;
+	}
+
+	public void setProduto(List<Produtos> produto) {
+		this.produto = produto;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -79,12 +94,10 @@ public class Usuario {
 		this.foto = foto;
 	}
 
-	/*
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", cascade = CascadeType.REMOVE)
-	@JsonIgnoreProperties("usuario")
-	private List<Produto> produto;
 
-	/* Insira os Getters and Setters */
+
+
+	
 
 	
 }

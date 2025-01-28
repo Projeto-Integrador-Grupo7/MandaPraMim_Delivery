@@ -55,6 +55,16 @@ public class ProdutosController {
 		
 	}
 	
+	
+	@GetMapping("/saudaveis")
+    public ResponseEntity<List<Produtos>> getProdutosSaudaveis() {
+        List<Produtos> produtosSaudaveis = produtosRepository.findBySaudavelTrue();
+        if (produtosSaudaveis.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        return ResponseEntity.ok(produtosSaudaveis);
+    }
+	
 
 	@PostMapping("/cadastrar")
 	public ResponseEntity <Produtos> post(@Valid @RequestBody Produtos produtos){
@@ -89,7 +99,5 @@ public class ProdutosController {
 		produtosRepository.deleteById(id);
 	}
 	
-	
-
 	
 }
