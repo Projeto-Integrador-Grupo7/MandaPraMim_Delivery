@@ -2,6 +2,8 @@ package com.generation.deliverymandapramim.model;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 //import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
@@ -9,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 //import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Digits;
@@ -42,11 +45,11 @@ public class Produtos {
 	@Digits(integer = 8, fraction = 2)
 	private BigDecimal preco;
 	
-/*	
+
 	@ManyToOne
 	@JsonIgnoreProperties("produtos")
 	private Categorias categorias;
-*/
+
 
 	public Long getId() {
 		return id;
@@ -97,7 +100,7 @@ public class Produtos {
 		this.preco = preco;
 	}
 
-/*
+
 	public Categorias getCategorias() {
 		return categorias;
 	}
@@ -106,7 +109,7 @@ public class Produtos {
 	public void setCategorias(Categorias categorias) {
 		this.categorias = categorias;
 	}
-	*/
+
 	
 	
 
