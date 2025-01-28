@@ -48,13 +48,13 @@ public class CategoriasController {
 		return ResponseEntity.ok(categoriasRepository.findAllByNomeContainingIgnoreCase(nome));
 	}
 	
-	@PostMapping
+	@PostMapping("/cadastrar")
 	public ResponseEntity<Categorias> post(@Valid @RequestBody Categorias categoria) {
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(categoriasRepository.save(categoria));
 	}
 	
-	@PutMapping
+	@PutMapping("/atualizar")
 	public ResponseEntity<Categorias> put(@Valid @RequestBody Categorias categoria) {
 		return categoriasRepository.findById(categoria.getId())
 				.map(resposta -> ResponseEntity.status(HttpStatus.OK)

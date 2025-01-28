@@ -25,16 +25,25 @@ public class Categorias {
 	
 	@NotBlank(message = "O campo Nome é obrigatório para a digitação")
 	@Size(min = 5, max = 100, message = "O campo Nome deve conter no mínimo 05 e no máximo 100 caracteres")
-	private String nome;
+	private String nome; // Alimentos saudaveis
 	
 	@NotBlank(message = "O campo Descrição é obrigatório para a digitação")
 	@Size(min = 5, max = 255, message = "O campo Descrição deve conter no mínimo 05 e no máximo 255 caracteres")
-	private String descricao;
+	private String descricao; // 
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "categoria", cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties("categorias")
 	private List<Produtos> produtos;
 	
+	
+	public List<Produtos> getProduto() {
+		return produto;
+	}
+
+	public void setProduto(List<Produtos> produto) {
+		this.produto = produto;
+	}
+
 	public Long getId() {
 		return id;
 	}

@@ -9,5 +9,7 @@ import com.generation.deliverymandapramim.model.Produtos;
 
 public interface ProdutosRepository extends JpaRepository <Produtos, Long>{
 	public List<Produtos> findAllByNomeContainingIgnoreCase(@Param("nome") String nome);
+	
+	public List<Produtos> findBySaudavelTrue();
 						  
 }
