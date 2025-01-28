@@ -48,7 +48,7 @@ public class Produtos {
 
 	@ManyToOne
 	@JsonIgnoreProperties("produtos")
-	private Categorias categorias;
+	private Categorias categoria;
 
 
 	public Long getId() {
@@ -102,12 +102,12 @@ public class Produtos {
 
 
 	public Categorias getCategorias() {
-		return categorias;
+		return categoria;
 	}
 
 
 	public void setCategorias(Categorias categorias) {
-		this.categorias = categorias;
+		this.categoria = categorias;
 	}
 
 	
