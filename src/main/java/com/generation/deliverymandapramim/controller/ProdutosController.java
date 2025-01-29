@@ -21,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.generation.deliverymandapramim.model.Produtos;
 import com.generation.deliverymandapramim.repository.CategoriasRepository;
 import com.generation.deliverymandapramim.repository.ProdutosRepository;
+import com.generation.deliverymandapramim.service.ProdutoService;
 
 import jakarta.validation.Valid;
 
@@ -34,6 +35,8 @@ public class ProdutosController {
 	
 	@Autowired
 	CategoriasRepository categoriasRepository;
+	
+	ProdutoService produtoService;
 
 	
 	@GetMapping("/all")

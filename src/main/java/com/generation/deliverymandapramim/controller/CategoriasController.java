@@ -31,7 +31,7 @@ public class CategoriasController {
 	@Autowired
 	private CategoriasRepository categoriasRepository;
 	
-	@GetMapping
+	@GetMapping ("/all")
 	public ResponseEntity<List<Categorias>> getAll() {
 		return ResponseEntity.ok(categoriasRepository.findAll());
 	}

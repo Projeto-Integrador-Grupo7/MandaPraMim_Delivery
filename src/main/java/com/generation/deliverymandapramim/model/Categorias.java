@@ -31,17 +31,17 @@ public class Categorias {
 	@Size(min = 5, max = 255, message = "O campo Descrição deve conter no mínimo 05 e no máximo 255 caracteres")
 	private String descricao; // 
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "categoria", cascade = CascadeType.REMOVE)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "categorias", cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties("categorias")
-	private List<Produtos> produtos;
+	private List<Produtos> produto;
 	
 	
 	public List<Produtos> getProduto() {
-		return produtos;
+		return produto;
 	}
 
 	public void setProduto(List<Produtos> produto) {
-		this.produtos = produto;
+		this.produto = produto;
 	}
 
 	public Long getId() {
