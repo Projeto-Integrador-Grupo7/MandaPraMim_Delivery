@@ -72,6 +72,6 @@ public class CategoriasController {
 		
 		categoriasRepository.deleteById(id);
 	}
-	
+
 	
 }

@@ -37,11 +37,11 @@ public class Categorias {
 	
 	
 	public List<Produtos> getProduto() {
-		return produto;
+		return produtos;
 	}
 
 	public void setProduto(List<Produtos> produto) {
-		this.produto = produto;
+		this.produtos = produto;
 	}
 
 	public Long getId() {

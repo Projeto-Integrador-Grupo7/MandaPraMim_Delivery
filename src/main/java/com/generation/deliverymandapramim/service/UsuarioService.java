@@ -1,70 +1,103 @@
 package com.generation.deliverymandapramim.service;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.generation.deliverymandapramim.model.Usuario;
+import com.generation.deliverymandapramim.model.UsuarioLogin;
 import com.generation.deliverymandapramim.repository.UsuarioRepository;
+import com.generation.deliverymandapramim.security.JwtService;
+
 
 @Service
 public class UsuarioService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-/*	
-	public Optional<BigDecimal> (Long id) {
-	    Optional<Usuario> usuario = usuarioRepository.findById(id);
 
-	    if (usuario.isPresent()) {
-	        BigDecimal peso = usuario.get().getPeso();
-	        BigDecimal altura = usuario.get().getAltura();
+	@Autowired
+	private JwtService jwtService;
 
-	        // Garantir que peso e altura sejam maiores que zero
-	        if (peso.compareTo(BigDecimal.ZERO) > 0 && altura.compareTo(BigDecimal.ZERO) > 0) {
-	            BigDecimal alturaSquared = altura.multiply(altura);
-	            BigDecimal imc = peso.divide(alturaSquared, MathContext.DECIMAL64);
+	@Autowired
+	private AuthenticationManager authenticationManager;
 
-	            //Ajustar o IMC para ter 2 casas  decimais
-	            BigDecimal imcComDuasCasas = imc.setScale(2, RoundingMode.HALF_UP);
-	           
-	            return Optional.of(imcComDuasCasas);
-	        }
-	    }
-
-	    return Optional.empty();
-	}
-	*/
 	public Optional<Usuario> cadastrarUsuario(Usuario usuario) {
 
 		if (usuarioRepository.findByUsuario(usuario.getUsuario()).isPresent())
 			return Optional.empty();
 
+		usuario.setSenha(criptografarSenha(usuario.getSenha()));
+
 		return Optional.of(usuarioRepository.save(usuario));
-	
+
 	}
 
 	public Optional<Usuario> atualizarUsuario(Usuario usuario) {
-		
-		if(usuarioRepository.findById(usuario.getId()).isPresent()) {
+
+		if (usuarioRepository.findById(usuario.getId()).isPresent()) {
 
 			Optional<Usuario> buscaUsuario = usuarioRepository.findByUsuario(usuario.getUsuario());
 
-			if ( (buscaUsuario.isPresent()) && ( buscaUsuario.get().getId() != usuario.getId()))
+			if ((buscaUsuario.isPresent()) && (buscaUsuario.get().getId() != usuario.getId()))
 				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já existe!", null);
 
+			usuario.setSenha(criptografarSenha(usuario.getSenha()));
+
 			return Optional.ofNullable(usuarioRepository.save(usuario));
-			
+
 		}
-		
+
 		return Optional.empty();
-	
+
 	}
-	
+
+	public Optional<UsuarioLogin> autenticarUsuario(Optional<UsuarioLogin> usuarioLogin) {
+
+		var credenciais = new UsernamePasswordAuthenticationToken(usuarioLogin.get().getUsuario(),
+				usuarioLogin.get().getSenha());
+
+		Authentication authentication = authenticationManager.authenticate(credenciais);
+
+		if (authentication.isAuthenticated()) {
+
+			Optional<Usuario> usuario = usuarioRepository.findByUsuario(usuarioLogin.get().getUsuario());
+
+			if (usuario.isPresent()) {
+
+				usuarioLogin.get().setId(usuario.get().getId());
+				usuarioLogin.get().setNome(usuario.get().getNome());
+				usuarioLogin.get().setFoto(usuario.get().getFoto());
+				usuarioLogin.get().setToken(gerarToken(usuarioLogin.get().getUsuario()));
+				usuarioLogin.get().setSenha("");
+
+				return usuarioLogin;
+
+			}
+
+		}
+
+		return Optional.empty();
+
+	}
+
+	private String criptografarSenha(String senha) {
+
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+		return encoder.encode(senha);
+
+	}
+
+	private String gerarToken(String usuario) {
+		return "Bearer " + jwtService.generateToken(usuario);
+	}
+
 }

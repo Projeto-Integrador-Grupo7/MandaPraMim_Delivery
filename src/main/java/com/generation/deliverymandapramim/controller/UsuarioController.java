@@ -19,8 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.generation.deliverymandapramim.model.Usuario;
+import com.generation.deliverymandapramim.model.UsuarioLogin;
 import com.generation.deliverymandapramim.repository.UsuarioRepository;
-
+import com.generation.deliverymandapramim.service.UsuarioService;
 
 import jakarta.validation.Valid;
 
@@ -30,12 +31,16 @@ import jakarta.validation.Valid;
 public class UsuarioController {
 
 	@Autowired
+	private UsuarioService usuarioService;
+
+	@Autowired
 	private UsuarioRepository usuarioRepository;
 
 	@GetMapping("/all")
 	public ResponseEntity<List<Usuario>> getAll() {
 
 		return ResponseEntity.ok(usuarioRepository.findAll());
+
 	}
 
 	@GetMapping("/{id}")
@@ -44,32 +49,37 @@ public class UsuarioController {
 				.orElse(ResponseEntity.notFound().build());
 	}
 
+	@PostMapping("/logar")
+	public ResponseEntity<UsuarioLogin> autenticarUsuario(@RequestBody Optional<UsuarioLogin> usuarioLogin) {
+		return usuarioService.autenticarUsuario(usuarioLogin)
+				.map(resposta -> ResponseEntity.status(HttpStatus.OK).body(resposta))
+				.orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+	}
+
 	@PostMapping("/cadastrar")
-	public ResponseEntity<Usuario> post(@RequestBody @Valid Usuario usuario) {
-		Usuario usuarioSalva = usuarioRepository.save(usuario);
-		return ResponseEntity.status(HttpStatus.CREATED).body(usuarioSalva);
+	public ResponseEntity<Usuario> postUsuario(@RequestBody @Valid Usuario usuario) {
+
+		return usuarioService.cadastrarUsuario(usuario)
+				.map(resposta -> ResponseEntity.status(HttpStatus.CREATED).body(resposta))
+				.orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+
 	}
 
 	@PutMapping("/atualizar")
-	public ResponseEntity<Usuario> putUsuario(@RequestBody @Valid Usuario usuario) {
-		if (usuarioRepository.existsById(usuario.getId())) { 
-			Usuario usuarioAtualizada = usuarioRepository.save(usuario);
+	public ResponseEntity<Usuario> putUsuario(@Valid @RequestBody Usuario usuario) {
+		return usuarioService.atualizarUsuario(usuario)
+				.map(resposta -> ResponseEntity.status(HttpStatus.OK).body(resposta))
+				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 
-			return ResponseEntity.status(HttpStatus.OK).body(usuarioAtualizada);
-		} else {
-
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoria não encontrada");
-		}
 	}
-	
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
 		Optional<Usuario> usuario = usuarioRepository.findById(id);
 
-		if (usuario.isEmpty()) // Verifica se a postagem existe ----> poderia usar o .map nesse caso tambem
+		if (usuario.isEmpty())
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
 		usuarioRepository.deleteById(id);
-} 
-} 
+	}
+}

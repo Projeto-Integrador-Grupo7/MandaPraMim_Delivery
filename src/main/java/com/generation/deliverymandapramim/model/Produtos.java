@@ -48,9 +48,7 @@ public class Produtos {
 	@ManyToOne
 	@JsonIgnoreProperties("produtos")
 	private Categorias categoria;
-<<<<<<< HEAD
-=======
-	
+
 	
 	@ManyToOne
 	@JsonIgnoreProperties("produtos")
@@ -78,7 +76,6 @@ public class Produtos {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
->>>>>>> f184e391118be9dd639fd55db83d71daa3c5e977
 
 
 	public Long getId() {
