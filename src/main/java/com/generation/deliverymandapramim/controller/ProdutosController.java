@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.generation.deliverymandapramim.model.Produtos;
@@ -25,7 +26,7 @@ import com.generation.deliverymandapramim.service.ProdutoService;
 
 import jakarta.validation.Valid;
 
-@Controller
+@RestController
 @RequestMapping("/produtos")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ProdutosController {
@@ -36,7 +37,8 @@ public class ProdutosController {
 	@Autowired
 	CategoriasRepository categoriasRepository;
 	
-	ProdutoService produtoService;
+    @Autowired
+    ProdutoService produtoService;
 
 	
 	@GetMapping("/all")
@@ -68,7 +70,7 @@ public class ProdutosController {
         return ResponseEntity.ok(produtosSaudaveis);
     }
 	
-
+	
 	@PostMapping("/cadastrar")
 	public ResponseEntity <Produtos> post(@Valid @RequestBody Produtos produtos){
 		if(categoriasRepository.existsById(produtos.getCategorias().getId()))
@@ -76,7 +78,6 @@ public class ProdutosController {
 		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A categoria informada não existe.", null);
 		
 	}
-
 
 	@PutMapping("/atualizar")
 	public ResponseEntity <Produtos> put(@Valid @RequestBody Produtos produtos){
@@ -90,7 +91,6 @@ public class ProdutosController {
 	}
 
 
-	
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
