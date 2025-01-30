@@ -16,33 +16,33 @@ import io.swagger.v3.oas.models.responses.ApiResponses;
 public class SwaggerConfig {
 
 	@Bean
-    OpenAPI springdeliverymandapramimOpenAPI() {
-        return new OpenAPI()
-            .info(new Info()
-                .title("Projeto Delivery Manda Pra Mim")
-                .description("Projeto Delivery Manda Pra Mim - Generation Brasil")
-                .version("v0.0.1")
-                .license(new License()
-                    .name("Generation Brasil")
-                    .url("https://brazil.generation.org/"))
-                .contact(new Contact()
-                    .name("Generation Brasil")
-                    .url("https://github.com/Projeto-Integrador-Grupo7/MandaPraMim_Delivery")
-                    .email("generation.g777@gmail.com")))
-            .externalDocs(new ExternalDocumentation()
-                .description("Github")
-                .url("https://github.com/Projeto-Integrador-Grupo7/MandaPraMim_Delivery"));
-    }
-
+	OpenAPI springDeliveryMandaPraMim() {
+		return new OpenAPI()	
+				.info(new Info()
+						.title("Projeto Delivery Manda Pra Mim")
+						.description("Projeto Delivery Manda Pra Mim - Generation Brasil")
+						.version("v0.0.1")
+						.license(new License()
+								.name("Grupo 7")
+								.url("https://github.com/Projeto-Integrador-Grupo7"))
+						.contact(new Contact()
+								.name("Grupo 7")
+								.url("https://github.com/Projeto-Integrador-Grupo7")
+								.email("generation.g777@gmail.com")))
+						.externalDocs(new ExternalDocumentation()
+								.description("Generation")
+								.url("https://brazil.generation.org/"));
+	}
 
 	@Bean
 	OpenApiCustomizer customerGlobalHeaderOpenApiCustomiser() {
-
+		
 		return openApi -> {
-			openApi.getPaths().values().forEach(pathItem -> pathItem.readOperations().forEach(operation -> {
-
+			openApi.getPaths().values().forEach(pathItem -> pathItem.readOperations()
+					.forEach(operation -> {
+				
 				ApiResponses apiResponses = operation.getResponses();
-
+				
 				apiResponses.addApiResponse("200", createApiResponse("Sucesso!"));
 				apiResponses.addApiResponse("201", createApiResponse("Objeto Persistido!"));
 				apiResponses.addApiResponse("204", createApiResponse("Objeto Excluído!"));
@@ -50,8 +50,9 @@ public class SwaggerConfig {
 				apiResponses.addApiResponse("401", createApiResponse("Acesso Não Autorizado!"));
 				apiResponses.addApiResponse("403", createApiResponse("Acesso Proibido!"));
 				apiResponses.addApiResponse("404", createApiResponse("Objeto Não Encontrado!"));
-				apiResponses.addApiResponse("500", createApiResponse("Erro na Aplicação!"));
-
+				apiResponses.addApiResponse("500", createApiResponse("Erro Na Aplicação!"));
+				
+				
 			}));
 		};
 	}
@@ -59,6 +60,6 @@ public class SwaggerConfig {
 	private ApiResponse createApiResponse(String message) {
 
 		return new ApiResponse().description(message);
-
 	}
+
 }

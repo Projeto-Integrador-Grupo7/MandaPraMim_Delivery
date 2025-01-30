@@ -1,14 +1,31 @@
 package com.generation.deliverymandapramim.model;
 
+/**
+ * Classe que representa o modelo de Usuário para fins de login.
+ * Esta classe é utilizada para armazenar as informações do usuário
+ * durante o processo de autenticação, incluindo um token de sessão.
+ */
 public class UsuarioLogin {
-
+	
+	// Identificador único do usuário
 	private Long id;
+	
+	// Nome do usuário
 	private String nome;
+	
+	// Nome de usuário, geralmente um email ou nome de login
 	private String usuario;
+	
+	// Senha do usuário, utilizada para autenticação
 	private String senha;
+	
+	// URL da foto do usuário, se disponível
 	private String foto;
+	
+	// Token de autenticação gerado após o login bem-sucedido
 	private String token;
-
+	
+	// Métodos getters e setters para acessar e modificar os atributos da classe
 	public Long getId() {
 		return this.id;
 	}
@@ -55,5 +72,7 @@ public class UsuarioLogin {
 
 	public void setToken(String token) {
 		this.token = token;
-	} 
+	}
+
 }
+

@@ -19,59 +19,96 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
-
-@Configuration 
-@EnableWebSecurity
+/**
+ * Classe de configuração de segurança básica para a aplicação.
+ * Esta classe configura a autenticação e autorização usando Spring Security.
+ */
+@Configuration
+@EnableWebSecurity // Habilita a configuração de segurança da aplicação
 public class BasicSecurityConfig {
-	@Autowired //Spring injeta automaticamente componentes da JwtAuthFilter
-	private JwtAuthFilter authFilter;
 
-	 //Configura um serviço de detalhes do usuário personalizado, que é responsável por carregar os dados 
-	 //do usuário (e-mail, senha e permissões) do banco de dados.
-	
-	@Bean
-	UserDetailsService userDetailsService() {   
+    @Autowired
+    private JwtAuthFilter authFilter; // Filtro de autenticação JWT
+    
+    /**
+     * Define um bean para o serviço de detalhes do usuário.
+     * 
+     * @return Uma instância de UserDetailsService.
+     */
+    @Bean
+    UserDetailsService userDetailsService() {
 
-		return new UserDetailsServiceImpl();
-	}
+        return new UserDetailsServiceImpl(); // Retorna a implementação do serviço de detalhes do usuário
+    }
+    
 
-	@Bean  
-	PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    /**
+     * Define um bean para o codificador de senhas.
+     * 
+     * @return Uma instância de PasswordEncoder usando BCrypt.
+     */
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(); // Retorna um codificador de senhas BCrypt
+    }
 
-	@Bean  
-	AuthenticationProvider authenticationProvider() {
-		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-		authenticationProvider.setUserDetailsService(userDetailsService());
-		authenticationProvider.setPasswordEncoder(passwordEncoder());
-		return authenticationProvider;
-	}
+    /**
+     * Define um bean para o provedor de autenticação.
+     * 
+     * @return Uma instância de AuthenticationProvider configurada com o serviço de detalhes do usuário e o codificador de senhas.
+     */
+    @Bean
+    AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userDetailsService()); // Define o serviço de detalhes do usuário
+        authenticationProvider.setPasswordEncoder(passwordEncoder()); // Define o codificador de senhas
+        return authenticationProvider; // Retorna o provedor de autenticação
+    }
+    
+    /**
+     * Define um bean para o gerenciador de autenticação.
+     * 
+     * @param authenticationConfiguration Configuração de autenticação.
+     * @return Uma instância de AuthenticationManager.
+     * @throws Exception Se ocorrer um erro ao obter o gerenciador de autenticação.
+     */
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
+        return authenticationConfiguration.getAuthenticationManager(); // Retorna o gerenciador de autenticação
+    }
+    
+    /**
+     * Define um bean para a cadeia de filtros de segurança.
+     * 
+     * @param http Configuração de segurança HTTP.
+     * @return A cadeia de filtros de segurança configurada.
+     * @throws Exception Se ocorrer um erro ao configurar a segurança HTTP.
+     */
+    @Bean
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    	
+    	// Configura a gestão de sessão para ser stateless (sem estado)
+    	http
+	        .sessionManagement(management -> management
+	                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) 
+	        		.csrf(csrf -> csrf.disable()) // Desabilita a proteção CSRF
+	        		.cors(withDefaults()); // Habilita CORS com configurações padrão
+    	
+    	// Configura as regras de autorização para as requisições HTTP
+    	http
+	        .authorizeHttpRequests((auth) -> auth
+	                .requestMatchers("/usuarios/logar").permitAll() // Permite acesso sem autenticação
+	                .requestMatchers("/usuarios/cadastrar").permitAll() // Permite acesso sem autenticação
+	                .requestMatchers("/error/**").permitAll() // Permite acesso sem autenticação
+	                .requestMatchers(HttpMethod.OPTIONS).permitAll() // Permite requisições OPTIONS sem autenticação
+	                .anyRequest().authenticated()) // Requer autenticação para qualquer outra requisição
+	        .authenticationProvider(authenticationProvider()) // Define o provedor de autenticação
+	        .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class) // Adiciona o filtro de autenticação JWT antes do filtro de autenticação padrão
+	        .httpBasic(withDefaults()); // Habilita autenticação básica com configurações padrão
 
-	@Bean //Gerencia o processo de autenticaçao com base nas configuraçoes fornecidas
-	AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
-			throws Exception {
-		return authenticationConfiguration.getAuthenticationManager();
-	}
+		return http.build(); // Retorna a cadeia de filtros de segurança configurada
 
-	@Bean 
-	SecurityFilterChain filterChain(HttpSecurity http) throws Exception { // Configura a cadeia de filtros de segurança da aplicação.
+    }
 
-		http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))  // Define que a aplicação não manterá sessões (Stateless).
-				.csrf(csrf -> csrf.disable()).cors(withDefaults());
-
-		http.authorizeHttpRequests((auth) -> auth  
-				.requestMatchers("/usuarios/logar").permitAll() 
-				.requestMatchers("/usuarios/cadastrar").permitAll()
-				.requestMatchers("/error/**").permitAll()
-				.requestMatchers(HttpMethod.OPTIONS).permitAll()  
-				.anyRequest().authenticated()) // Todas as outras requisições exigem autenticação.
-				.authenticationProvider(authenticationProvider())
-				.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class) // Adiciona o filtro personalizado JwtAuthFilter antes do filtro padrão de autenticação.
-				.httpBasic(withDefaults());
-
-		return http.build();
-
-	}
 }

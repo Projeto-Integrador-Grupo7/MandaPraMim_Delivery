@@ -8,58 +8,75 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.generation.deliverymandapramim.model.Usuario;
 
-public class UserDetailsImpl implements UserDetails { 
-	private static final long serialVersionUID = 1L;
+/**
+ * Implementação da interface UserDetails do Spring Security.
+ * Esta classe é usada para representar um usuário autenticado no sistema,
+ * incluindo suas credenciais e autoridades.
+ */
+public class UserDetailsImpl implements UserDetails {
 
-	private String userName;
-	private String password;
-	private List<GrantedAuthority> authorities; 
+	private static final long serialVersionUID = 1L; // Versão da classe para serialização
 
-	public UserDetailsImpl(Usuario user) {  
-		this.userName = user.getUsuario(); 
-		this.password = user.getSenha(); 
+	private String userName; // Nome de usuário (login)
+	private String password; // Senha do usuário
+	private List<GrantedAuthority> authorities; // Lista de autoridades (permissões) do usuário
+
+	/**
+	 * Construtor que inicializa o UserDetailsImpl com um objeto Usuario.
+	 * 
+	 * @param user O objeto Usuario que contém as informações do usuário.
+	 */
+	public UserDetailsImpl(Usuario user) {
+		this.userName = user.getUsuario(); // Define o nome de usuário
+		this.password = user.getSenha(); // Define a senha
 	}
-
-	public UserDetailsImpl() { 
-	}
-
 	
+	// Construtor padrão
+	public UserDetailsImpl() {	}
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-
+		
+		// Retorna as autoridades (permissões) do usuário
 		return authorities;
 	}
 
 	@Override
 	public String getPassword() {
 
+		// Retorna a senha do usuário
 		return password;
 	}
 
 	@Override
 	public String getUsername() {
-
+		
+		// Retorna o nome de usuário
 		return userName;
 	}
 
 	@Override
 	public boolean isAccountNonExpired() {
-		return true;
+		// Indica se a conta do usuário não está expirada
+		return true; // Para simplificação, sempre retorna true
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return true;
+		// Indica se a conta do usuário não está bloqueada
+		return true; // Para simplificação, sempre retorna true
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		return true;
+		// Indica se as credenciais do usuário não estão expiradas
+		return true; // Para simplificação, sempre retorna true
 	}
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		// Indica se a conta do usuário está habilitada
+		return true; // Para simplificação, sempre retorna true
 	}
 
 

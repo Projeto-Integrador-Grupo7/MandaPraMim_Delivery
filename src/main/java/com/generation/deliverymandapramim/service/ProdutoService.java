@@ -1,35 +1,26 @@
 package com.generation.deliverymandapramim.service;
 
-import java.util.Optional;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.generation.deliverymandapramim.model.Produtos;
-import com.generation.deliverymandapramim.repository.ProdutosRepository;
+import com.generation.deliverymandapramim.model.Produto;
+import com.generation.deliverymandapramim.repository.ProdutoRepository;
 
 @Service
 public class ProdutoService {
 
-	@Autowired
-	private ProdutosRepository produtoRepository;
+    @Autowired
+    private ProdutoRepository produtoRepository; // Repositório para acessar os dados dos produtos
 
-	public Optional<Boolean> recomendarProdutos(Long id) {
-		
-		Optional<Produtos> produto = produtoRepository.findById(id);
-
-		if (produto.isPresent()) {
-			Boolean saudavel = produto.get().getSaudavel();
-
-			// Lógica de recomendação com base no atributo 'saudável'
-			if (Boolean.TRUE.equals(saudavel)) {
-				return Optional.of(true); // Produto recomendado
-			} else {
-				return Optional.of(false); // Produto não recomendado
-			}
-		}
-
-		// Retornar vazio se o produto não for encontrado
-		return Optional.empty();
-	}
+    /**
+     * Retorna uma lista de produtos saudáveis.
+     * 
+     * @return Lista de produtos saudáveis.
+     */
+    public List<Produto> recomendarProdutosSaudaveis() {
+        // Busca todos os produtos e filtra os que são saudáveis
+        return produtoRepository.findBySaudavelTrue(); // Método que busca produtos saudáveis
+    }
 }
