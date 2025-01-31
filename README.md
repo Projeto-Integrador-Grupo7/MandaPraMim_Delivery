@@ -17,6 +17,7 @@ Este projeto é uma API RESTful chamada "Delivery Manda Pra Mim", desenvolvida c
 - **JUnit**: Framework de testes utilizado para garantir a qualidade do código.
 - **Swagger (Springdoc OpenAPI)**: Para a documentação da API, permitindo que os desenvolvedores visualizem e testem os endpoints de forma interativa.
 - **Insomnia**: Ferramenta utilizada para realizar requisições aos endpoints da API durante o desenvolvimento e testes.
+- **Render**: Plataforma utilizada para o deploy da API, tornando-a acessível publicamente.
 
 ## Estrutura do Projeto
 
@@ -51,6 +52,38 @@ Este projeto é uma API RESTful chamada "Delivery Manda Pra Mim", desenvolvida c
 - **PUT /categorias**: Atualiza uma categoria existente.
 - **DELETE /categorias/{id}**: Remove uma categoria pelo ID.
 
+## Acessar a API
+
+Você pode acessar a API através do seguinte link:
+
+- [Delivery Manda Pra Mim API](https://mandapramim-delivery.onrender.com/swagger-ui/index.html)
+
+E para visualizar a documentação da API, acesse o Swagger UI:
+
+- [Swagger UI](http://localhost:8080/swagger-ui/)
+
+## Configuração do Ambiente
+
+O projeto utiliza o arquivo `application.properties` para gerenciar as configurações de ambiente. Existem duas configurações principais:
+
+### Ambiente de Desenvolvimento
+
+Para executar a aplicação localmente e realizar alterações no código, utilize o arquivo `application-dev.properties`. Este arquivo deve conter as configurações necessárias para o ambiente de desenvolvimento, como a conexão com o banco de dados local.
+
+### Ambiente de Produção
+
+Para acessar a aplicação implantada no Render, utilize o arquivo `application-prod.properties`. Este arquivo deve conter as configurações necessárias para o ambiente de produção, como a conexão com o banco de dados em produção.
+
+### Como Alternar Entre os Ambientes
+
+1. **Desenvolvimento**: Para executar a aplicação em modo de desenvolvimento, certifique-se de que o arquivo `application-dev.properties` está configurado corretamente e que você está executando a aplicação com o perfil de desenvolvimento:
+   ```bash
+   mvn spring-boot:run -Dspring-boot.run.profiles=dev
+
+2. **Produção**: Para executar a aplicação em modo de produção, utilize o arquivo application-prod.properties e execute a aplicação com o perfil de produção:
+   ```bash
+   mvn spring-boot:run -Dspring-boot.run.profiles=prod
+
 ## Conceitos Aprendidos
 
 Durante o desenvolvimento deste projeto, aprendi sobre:
@@ -60,7 +93,7 @@ Durante o desenvolvimento deste projeto, aprendi sobre:
 - **Segurança em APIs**: Implementei autenticação e autorização utilizando o Spring Security, garantindo que apenas usuários autenticados possam acessar determinados recursos.
 - **Testes Automatizados**: Aprendi a escrever testes utilizando JUnit e a importância de garantir a qualidade do código através de testes automatizados.
 - **Documentação de APIs**: Utilizei o Swagger para documentar a API, permitindo que outros desenvolvedores entendam e testem os endpoints de forma interativa.
-
+- **Deploy em Render**: Aprendi a realizar o deploy da aplicação na plataforma Render, tornando a API acessível publicamente e facilitando a integração com outras aplicações.
 
 1. Clone o repositório:
   ```bash
@@ -74,8 +107,6 @@ Durante o desenvolvimento deste projeto, aprendi sobre:
   ```bash
    mvn spring-boot:run
   ```
-4. Acesse a API através do Swagger UI:
-URL: http://localhost:8080/swagger-ui/
 
 ## Contribuições  
 Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou pull requests.
