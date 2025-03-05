@@ -40,7 +40,7 @@ public class Categoria {
 	private String descricao;
 
 	// URL da foto do usuário, pode ter no máximo 5000 caracteres
-	@Size(max = 5000, message = "O link da foto não pode ser maior do que 5000 caracteres")
+	@Size(max = 500000, message = "O link da foto não pode ser maior do que 5000 caracteres")
 	private String foto;
 	
 	// Relacionamento One-to-Many com a classe Produto
