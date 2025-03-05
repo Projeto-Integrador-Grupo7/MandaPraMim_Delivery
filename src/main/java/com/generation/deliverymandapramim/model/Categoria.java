@@ -38,6 +38,10 @@ public class Categoria {
 	@NotBlank(message = "O campo Descrição é obrigatório para a digitação")
 	@Size(min = 5, max = 255, message = "O campo Descrição deve conter no mínimo 05 e no máximo 255 caracteres")
 	private String descricao;
+
+	// URL da foto do usuário, pode ter no máximo 5000 caracteres
+	@Size(max = 5000, message = "O link da foto não pode ser maior do que 5000 caracteres")
+	private String foto;
 	
 	// Relacionamento One-to-Many com a classe Produto
 	// Uma categoria pode ter vários produtos associados a ela
@@ -78,5 +82,12 @@ public class Categoria {
 		this.produto = produto;
 	}
 	
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
+	}
 	
 }

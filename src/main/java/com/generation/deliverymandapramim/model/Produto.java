@@ -54,6 +54,10 @@ public class Produto {
 	
 	private boolean saudavel; // Indica se o produto é saudável
 	
+	// URL da foto do usuário, pode ter no máximo 5000 caracteres
+	@Size(max = 5000, message = "O link da foto não pode ser maior do que 5000 caracteres")
+	private String foto;
+
 	/**
 	 * Relacionamento Many-to-One entre Produto e Categoria.
 	 * Cada produto pode estar associado a uma única categoria, 
@@ -140,6 +144,12 @@ public class Produto {
 		this.usuario = usuario;
 	}
 	
-	
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
+	}
 	
 }
